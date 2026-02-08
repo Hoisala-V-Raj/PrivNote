@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.prod
+./images/*
+.env.local
+.DS_Store
+*.log
+*.swp
+.idea/
+.vscode/
