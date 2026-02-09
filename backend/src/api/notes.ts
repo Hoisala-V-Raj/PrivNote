@@ -15,8 +15,11 @@ const router = Router();
 router.post('/', validateNote, async (req: Request, res: Response) => {
   try {
     const { note } = req.body;
-    const origin = req.get('origin') || undefined;
-    const result = await createNote(note, origin);
+    // Construct full base URL using X-Forwarded-Proto (from Nginx) and Host header
+    const protocol = req.get('X-Forwarded-Proto') || req.protocol || 'https';
+    const host = req.get('Host') || req.hostname;
+    const baseUrl = `${protocol}://${host}`;
+    const result = await createNote(note, baseUrl);
     res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create note' });

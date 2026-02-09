@@ -22,7 +22,7 @@ export async function createNote(noteText: string, baseUrl?: string) {
 
   await noteRepository.save(note);
 
-  const fallbackBaseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const fallbackBaseUrl = process.env.FRONTEND_URL || 'https://localhost:3000';
   const resolvedBaseUrl = baseUrl || fallbackBaseUrl;
 
   return {
