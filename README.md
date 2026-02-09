@@ -2,7 +2,7 @@
 
 A secure, self-destructing note-sharing application with AI-powered summarization capabilities. Create private notes that can be accessed with a password and automatically summarized using advanced AI models.
 
-## 🚀 Features
+## Features
 
 - **Secure Note Sharing**: Create encrypted notes with unique passwords
 - **AI-Powered Summarization**: Automatic summarization using Llama 3 or mock summarizer
@@ -11,8 +11,9 @@ A secure, self-destructing note-sharing application with AI-powered summarizatio
 - **Docker Support**: Full containerization for easy deployment
 - **RESTful API**: Well-documented backend API with TypeScript
 - **Database Persistence**: PostgreSQL database for note storage
+- **HTTPS Support**: Self-signed certificates for secure transmission
 
-## 🛠️ Tech Stack & Frameworks
+## Tech Stack & Frameworks
 
 ### Backend
 - **Node.js** - JavaScript runtime
@@ -37,7 +38,7 @@ A secure, self-destructing note-sharing application with AI-powered summarizatio
 - **Nginx** - Reverse proxy and static file serving
 - **GitHub Actions** - CI/CD (if configured)
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -46,7 +47,7 @@ Before you begin, ensure you have the following installed:
 - **PostgreSQL** (v16 or higher) - If not using Docker
 - **Git** - For version control
 
-## 🚀 Quick Start (Docker - Recommended)
+## Quick Start (Docker - Recommended)
 
 ### 1. Clone the Repository
 ```bash
@@ -82,7 +83,7 @@ docker compose down
 - **Backend API**: http://localhost:5000/api
 - **Nginx (Production)**: http://localhost:80
 
-## 🔧 Local Development Setup
+## Local Development Setup
 
 ### 1. Install Dependencies
 
@@ -179,7 +180,7 @@ ollama pull llama3
 # Set USE_MOCK_SUMMARIZER=false in .env
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 PrivNote/
@@ -208,7 +209,7 @@ PrivNote/
 └── README.md
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Notes API
 
@@ -277,7 +278,7 @@ Content-Type: application/json
 }
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Backend Tests
 ```bash
@@ -296,7 +297,7 @@ npm test
 - Component tests for React components
 - Integration tests for complete workflows
 
-## 🔒 Security Features
+## Security Features
 
 - **Password Protection**: Each note has a unique, auto-generated password
 - **Hashed Passwords**: Passwords are hashed using bcrypt
@@ -304,7 +305,7 @@ npm test
 - **CORS Protection**: Proper CORS configuration
 - **Environment Variables**: Sensitive data stored in environment variables
 
-## 🤖 AI Summarization
+## AI Summarization
 
 ### Mock Summarizer (Default)
 - Extracts key sentences from the note
@@ -323,7 +324,7 @@ npm test
 - **Keyword Extraction**: Focuses on key concepts rather than full sentences
 - **Fallback Mechanism**: Uses basic extraction if AI fails
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Deployment with Docker
 
@@ -358,7 +359,7 @@ npm run build
 # Serve dist/ folder with nginx or your preferred web server
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -412,7 +413,7 @@ Default ports used:
 
 Change ports in `docker-compose.yml` if conflicts occur.
 
-## 📝 Development Guidelines
+## Development Guidelines
 
 ### Code Style
 - TypeScript for type safety
@@ -427,11 +428,11 @@ Change ports in `docker-compose.yml` if conflicts occur.
 4. Add tests
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the ISC License.
 
-## 🆘 Support
+## Support
 
 For issues and questions:
 1. Check the troubleshooting section
@@ -440,4 +441,48 @@ For issues and questions:
 
 ---
 
-**Happy Note Sharing! 🚀**
+## Future Improvements
+
+This project has several planned features and improvements in the development roadmap:
+
+### Enhanced Authentication & Sharing
+- **Single Sign Code (SSC)**: Implement a centralized authentication system where users can authenticate with a code that grants temporary access to multiple notes without requiring individual passwords for each note.
+- **User Accounts**: Add optional user registration and login to create persistent note collections and sharing preferences.
+- **Share Expiration**: Set automatic expiration dates for shared notes, after which they become inaccessible.
+- **Access Logs**: Track and display who accessed a note and when, providing visibility into note security.
+
+### Advanced AI Capabilities
+- **AI Plugin System**: Build a modular plugin architecture to support multiple AI models and services (GPT, Claude, etc.) beyond Llama 3.
+- **Customizable Summarization**: Allow users to choose summarization style (bullet points, paragraph, key quotes) and detail level.
+- **Multi-language Support**: Enable summarization and note support in multiple languages with automatic translation.
+- **Sentiment Analysis**: Analyze and display the emotional tone of notes.
+- **Keyword Extraction**: Automatically identify and highlight important keywords in notes and summaries.
+
+### Security & Privacy
+- **End-to-End Encryption**: Implement client-side encryption where notes are encrypted before reaching the server, ensuring complete privacy even from administrators.
+- **Zero-Knowledge Architecture**: Build a system where the server cannot access note content in plaintext.
+- **Hardware Security Key Support**: Add support for FIDO2 hardware keys as an additional authentication factor.
+- **Automatic Purging**: Implement configurable automatic deletion of notes after viewing or after a set time period.
+
+### Customization & User Experience
+- **Theme Customization**: Allow users to customize the application theme (dark mode, light mode, custom color schemes).
+- **Custom Branding**: Support white-label deployment with custom logos, colors, and domain configuration.
+- **Export Options**: Export notes in multiple formats (PDF, Markdown, Plain Text, Rich Text).
+- **Batch Operations**: Create and share multiple notes simultaneously with template support.
+- **Note Analytics**: Display statistics about frequently accessed notes and summarization usage.
+
+### Infrastructure & Scalability
+- **Load Balancing**: Implement horizontal scaling with load balancing across multiple backend instances.
+- **Caching Layer**: Add Redis caching for frequently accessed notes and summarization results.
+- **CDN Integration**: Support CDN integration for faster frontend delivery globally.
+- **Database Optimization**: Implement query optimization and database sharding for large-scale deployments.
+- **Monitoring & Alerting**: Add comprehensive monitoring, metrics collection, and alerting capabilities.
+
+### Mobile & Cross-Platform
+- **Mobile Application**: Develop native iOS and Android applications for mobile note creation and sharing.
+- **Progressive Web App (PWA)**: Convert the web application to a PWA for offline access and installability.
+- **Browser Extensions**: Create browser extensions for easy note creation and sharing from any webpage.
+
+---
+
+Happy Note Sharing!
