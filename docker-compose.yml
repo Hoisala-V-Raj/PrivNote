@@ -48,7 +48,7 @@ services:
       DB_USER: privnote
       DB_PASSWORD: privnote
       DB_NAME: privnote
-      USE_MOCK_SUMMARIZER: false
+      USE_MOCK_SUMMARIZER: "false"
       CORS_ORIGIN: http://localhost:3000
       OLLAMA_URL: http://ollama:11434
     depends_on:
@@ -71,8 +71,6 @@ services:
       - "3000:3000"
     expose:
       - "3000"
-    environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000/api}
     depends_on:
       - backend
     volumes:
