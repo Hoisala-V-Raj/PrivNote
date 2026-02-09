@@ -13,6 +13,39 @@ function CreateNoteForm() {
   const [result, setResult] = useState<CreateNoteResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const copyText = async (text: string, successMessage: string) => {
+    if (!text) {
+      return;
+    }
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        alert(successMessage);
+        return;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      const succeeded = document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      if (!succeeded) {
+        throw new Error('copy failed');
+      }
+
+      alert(successMessage);
+    } catch {
+      alert('Copy failed. Please copy manually.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -31,8 +64,7 @@ function CreateNoteForm() {
 
   const handleCopyUrl = () => {
     if (result?.shareUrl) {
-      navigator.clipboard.writeText(result.shareUrl);
-      alert('URL copied to clipboard!');
+      void copyText(result.shareUrl, 'URL copied to clipboard!');
     }
   };
 
@@ -88,7 +120,7 @@ function CreateNoteForm() {
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
                 />
                 <button
-                  onClick={() => navigator.clipboard.writeText(result.password)}
+                  onClick={() => void copyText(result.password, 'Password copied to clipboard!')}
                   className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-medium"
                 >
                   Copy

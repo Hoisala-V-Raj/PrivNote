@@ -100,14 +100,14 @@ return formatted;
   candidates = summary
     .split('\n')
     .map(l => l.replace(/^[-*•0-9.]\s*/, '').trim())
-    .filter(Boolean);
+    .filter(l => this.isNotNarration(l));
 
   // If model returned paragraph → split sentences
   if (candidates.length <= 1) {
     candidates = summary
       .split(/[.!?]/)
       .map(s => s.trim())
-      .filter(Boolean);
+      .filter(l => this.isNotNarration(l));
   }
 
   // Ensure at least something exists
@@ -133,6 +133,27 @@ return formatted;
   }
 
   return result;
+}
+
+private isNotNarration(line: string): boolean {
+  if (!line || line.length === 0) return false;
+  
+  // Filter out meta-commentary about the summary itself
+  const narrationPatterns = [
+    /^here\s+is/i,
+    /^this\s+is/i,
+    /^the\s+following/i,
+    /summary\s+of/i,
+    /bullet\s+points?/i,
+    /three\s+bullet/i,
+    /each\s+under/i,
+    /^in\s+(three|3)/i,
+    /^\d+\s+words?/i,
+    /^\d+\s+bullet/i,
+    /under\s+\d+\s+words?/i,
+  ];
+  
+  return !narrationPatterns.some(pattern => pattern.test(line));
 }
 
 }

@@ -15,7 +15,8 @@ const router = Router();
 router.post('/', validateNote, async (req: Request, res: Response) => {
   try {
     const { note } = req.body;
-    const result = await createNote(note);
+    const origin = req.get('origin') || undefined;
+    const result = await createNote(note, origin);
     res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create note' });

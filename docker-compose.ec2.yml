@@ -1,6 +1,22 @@
-version: '3.8'
-
 services:
+  postgres:
+    image: postgres:15
+    container_name: privnote-postgres
+    environment:
+      POSTGRES_DB: privnote
+      POSTGRES_USER: privnote
+      POSTGRES_PASSWORD: "privnote123_1770667038"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - privnote-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U privnote"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   ollama:
     image: ollama/ollama:latest
     container_name: privnote-ollama
@@ -11,53 +27,24 @@ services:
     networks:
       - privnote-network
     restart: unless-stopped
-    # Use default command
-
-  postgres:
-    image: postgres:16-alpine
-    container_name: privnote-db
-    environment:
-      POSTGRES_USER: privnote
-      POSTGRES_PASSWORD: privnote
-      POSTGRES_DB: privnote
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U privnote"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - privnote-network
-    restart: unless-stopped
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: privnote-backend
     ports:
       - "5000:5000"
-    expose:
-      - "5000"
     environment:
-      PORT: 5000
-      NODE_ENV: development
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: privnote
-      DB_PASSWORD: privnote
-      DB_NAME: privnote
+      DATABASE_URL: "postgresql://privnote:privnote123_1770667038@postgres:5432/privnote"
+      OLLAMA_URL: "http://ollama:11434"
       USE_MOCK_SUMMARIZER: "false"
-      CORS_ORIGIN: http://localhost:3000
-      OLLAMA_URL: http://ollama:11434
+      FRONTEND_URL: "https://34.226.209.126"
+      NODE_ENV: "production"
     depends_on:
       postgres:
         condition: service_healthy
       ollama:
         condition: service_started
-    volumes:
-      - ./backend/src:/app/src
     networks:
       - privnote-network
     restart: unless-stopped
@@ -66,18 +53,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: privnote-frontend
     ports:
       - "3000:3000"
-    expose:
-      - "3000"
     environment:
-      REACT_APP_API_URL: "https://localhost/api"
-      VITE_API_PROXY: http://backend:5000
+      REACT_APP_API_URL: "https://34.226.209.126/api"
+      VITE_API_PROXY: "http://backend:5000"
     depends_on:
       - backend
-    volumes:
-      - ./frontend/src:/app/src
     networks:
       - privnote-network
     restart: unless-stopped

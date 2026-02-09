@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS notes (
+  id UUID PRIMARY KEY,
+  text TEXT NOT NULL,
+  "passwordHash" VARCHAR(255) NOT NULL,
+  summary TEXT,
+  "summaryGeneratedAt" TIMESTAMP WITH TIME ZONE,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_notes_id ON notes(id);
+CREATE INDEX IF NOT EXISTS idx_notes_createdAt ON notes("createdAt");

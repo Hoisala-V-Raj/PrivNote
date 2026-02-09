@@ -7,7 +7,7 @@ import { LlmService } from './llmService';
 const noteRepository = AppDataSource.getRepository(Note);
 const llmService = LlmService.getInstance();
 
-export async function createNote(noteText: string) {
+export async function createNote(noteText: string, baseUrl?: string) {
   const noteId = uuidv4();
   const password = generatePassword();
   const passwordHash = await bcrypt.hash(password, 10);
@@ -22,10 +22,13 @@ export async function createNote(noteText: string) {
 
   await noteRepository.save(note);
 
+  const fallbackBaseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const resolvedBaseUrl = baseUrl || fallbackBaseUrl;
+
   return {
     noteId,
     password,
-    shareUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/note/${noteId}`,
+    shareUrl: `${resolvedBaseUrl}/note/${noteId}`,
   };
 }
 
