@@ -17,15 +17,13 @@ services:
     image: postgres:16-alpine
     container_name: privnote-db
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-privnote_db}
-    ports:
-      - "${DB_PORT:-5432}:5432"
+      POSTGRES_USER: privnote
+      POSTGRES_PASSWORD: privnote
+      POSTGRES_DB: privnote
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U privnote"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -44,15 +42,15 @@ services:
       - "5000"
     environment:
       PORT: 5000
-      NODE_ENV: ${NODE_ENV:-development}
+      NODE_ENV: development
       DB_HOST: postgres
-      DB_PORT: ${DB_PORT:-5432}
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_NAME: ${DB_NAME:-privnote_db}
-      USE_MOCK_SUMMARIZER: ${USE_MOCK_SUMMARIZER:-false}
+      DB_PORT: 5432
+      DB_USER: privnote
+      DB_PASSWORD: privnote
+      DB_NAME: privnote
+      USE_MOCK_SUMMARIZER: false
       CORS_ORIGIN: http://localhost:3000
-      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_URL: http://ollama:11434
     depends_on:
       postgres:
         condition: service_healthy
