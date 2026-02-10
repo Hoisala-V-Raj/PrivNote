@@ -13,6 +13,20 @@ services:
       - privnote-network
     restart: unless-stopped
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: privnote-ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - privnote-network
+    restart: unless-stopped
+    entrypoint: sh -c "ollama serve & sleep 10 && ollama pull llama3 && wait"
+
   backend:
     build:
       context: ./backend
@@ -34,6 +48,7 @@ services:
       - "5000:5000"
     depends_on:
       - postgres
+      - ollama
     networks:
       - privnote-network
     restart: unless-stopped
@@ -75,6 +90,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  ollama_data:
     driver: local
 
 networks:
