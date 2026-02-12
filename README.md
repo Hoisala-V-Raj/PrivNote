@@ -83,6 +83,13 @@ docker compose down
 - **Backend API**: http://localhost:5000/api
 - **Nginx (Production)**: http://localhost:80
 
+### Live Deployment
+
+A live production instance is deployed and accessible at:
+- **Production URL**: https://34.226.209.126
+
+Note: This deployment uses self-signed SSL certificates, so your browser will show a security warning. Click "Advanced" and proceed to access the application.
+
 ## Local Development Setup
 
 ### 1. Install Dependencies
