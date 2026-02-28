@@ -55,7 +55,7 @@ Text:
         let summary = response.data.response?.trim();
 if (!summary) throw new Error('Empty Llama response');
 
-const formatted = this.formatSummary(summary, 150);
+const formatted = this.formatSummary(summary, 200);
 console.log("FINAL SUMMARY:\n", formatted);
 
 return formatted;
