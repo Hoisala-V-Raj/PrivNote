@@ -31,7 +31,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
-    entrypoint: sh -c "ollama serve & sleep 10 && ollama pull llama3 && echo 'Ollama ready' && wait"
+    entrypoint: sh -c "ollama serve & sleep 10 && ollama pull llama3.2:1b && echo 'Ollama ready' && wait"
 
   backend:
     build:
