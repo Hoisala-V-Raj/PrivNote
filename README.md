@@ -69,24 +69,24 @@ cp .env.prod.example .env.prod
 ### 3. Start the Application
 ```bash
 # Start all services
-docker compose up -d
+docker-compose up -d --build
 
 # View logs
-docker compose logs -f
+docker-compose logs -f
 
 # Stop services
-docker compose down
+docker-compose down
 ```
 
 ### 4. Access the Application
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000/api
-- **Nginx (Production)**: http://localhost:80
+- **Nginx HTTPS (optional local)**: https://localhost
 
 ### Live Deployment
 
 A live production instance is deployed and accessible at:
-- **Production URL**: https://34.226.209.126
+- **Production URL**: https://18.208.215.247
 
 Note: This deployment uses self-signed SSL certificates, so your browser will show a security warning. Click "Advanced" and proceed to access the application.
 
@@ -314,14 +314,14 @@ npm test
 
 ## AI Summarization
 
-### Mock Summarizer (Default)
+### Mock Summarizer (Fallback)
 - Extracts key sentences from the note
 - Formats as bullet points
 - No external dependencies
 
-### Llama 3 Integration (Optional)
+### Llama 3.2:1b Integration
 1. Install Ollama locally
-2. Pull the llama3 model: `ollama pull llama3`
+2. Pull the model: `ollama pull llama3.2:1b`
 3. Set `USE_MOCK_SUMMARIZER=false` in environment
 4. Configure `OLLAMA_URL` (default: http://localhost:11434)
 
@@ -330,6 +330,7 @@ npm test
 - **Length Validation**: Ensures summary is shorter than original content
 - **Keyword Extraction**: Focuses on key concepts rather than full sentences
 - **Fallback Mechanism**: Uses basic extraction if AI fails
+- **Formatting Rules**: 3-4 bullet points, each under 12 words
 
 ## Deployment
 
@@ -343,7 +344,24 @@ cp .env.prod.example .env.prod
 
 2. **Build and Deploy**
 ```bash
-docker compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml ps
+```
+
+### EC2 Deploy (Recommended Sequence)
+
+```bash
+cd /opt/privnote
+git fetch origin
+git checkout main
+git reset --hard origin/main
+git clean -fd
+
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml logs --tail=80 backend
+docker-compose -f docker-compose.prod.yml logs --tail=80 ollama
 ```
 
 3. **SSL Configuration** (Optional)
@@ -404,11 +422,22 @@ ollama run llama3
 #### 4. Docker Issues
 ```bash
 # Rebuild containers
-docker compose down
-docker compose up -d --build
+docker-compose down
+docker-compose up -d --build
 
 # Check logs
-docker compose logs -f [service-name]
+docker-compose logs -f [service-name]
+```
+
+#### 5. Git Pull Divergence on EC2
+If `git pull origin main` fails with divergent branches:
+
+```bash
+cd /opt/privnote
+git fetch origin
+git checkout main
+git reset --hard origin/main
+git clean -fd
 ```
 
 ### Port Conflicts
