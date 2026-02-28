@@ -7,7 +7,7 @@ interface OllamaResponse {
 export class LlmService {
   private static instance: LlmService;
   private ollamaUrl: string;
-  private ollamaModel: string = 'llama3';
+  private ollamaModel: string = 'llama3.2:1b';
   private maxRetries = 3;
   private retryDelay = 1000;
 
@@ -31,8 +31,8 @@ export class LlmService {
     const prompt = `Summarize the following text.
 
 Rules:
-- Maximum 3 bullet points
-- Each bullet must be under 6 words
+- 3-4 bullet points
+- Each bullet must be under 12 words
 - No full sentences
 - No explanations
 - Use simple phrases
@@ -129,10 +129,15 @@ return formatted;
       result = result.slice(0, lastSpace);
     }
 
-    result = result.trim() + '...';
+    result = result.trim();
   }
 
-  return result;
+  // Remove empty bullet points
+  const finalBullets = result
+    .split('\n')
+    .filter(line => line.replace(/^•\s*/, '').trim().length > 0);
+
+  return finalBullets.join('\n');
 }
 
 private isNotNarration(line: string): boolean {

@@ -15,10 +15,13 @@ const router = Router();
 router.post('/', validateNote, async (req: Request, res: Response) => {
   try {
     const { note } = req.body;
-    // Construct full base URL using X-Forwarded-Proto (from Nginx) and Host header
-    const protocol = req.get('X-Forwarded-Proto') || req.protocol || 'https';
-    const host = req.get('Host') || req.hostname;
-    const baseUrl = `${protocol}://${host}`;
+    // In development, skip baseUrl construction to use FRONTEND_URL from env
+    let baseUrl: string | undefined;
+    if (process.env.NODE_ENV !== 'development') {
+      const protocol = req.get('X-Forwarded-Proto') || req.protocol || 'https';
+      const host = req.get('Host') || req.hostname;
+      baseUrl = `${protocol}://${host}`;
+    }
     const result = await createNote(note, baseUrl);
     res.status(201).json(result);
   } catch (error) {
